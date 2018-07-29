@@ -1,0 +1,31 @@
+{
+  "name": "hello-async",
+  "version": "1.0.0",
+  "description": "A library to help developer use async functions as promises.",
+  "main": "dist/hello-async.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangshuang/hello-async.git"
+  },
+  "keywords": [
+    "async"
+  ],
+  "author": "tangshuang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tangshuang/hello-async/issues"
+  },
+  "homepage": "https://github.com/tangshuang/hello-async#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^4.16.3",
+    "webpack-bufferify": "^1.0.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {}
+}
