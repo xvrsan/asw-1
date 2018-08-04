@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<script src="../dist/hello-async.js"></script>
+<script>
+const { asyncEach, asyncI, asyncS, asyncP } = HelloAsync
+const items = [1, 2, 3, 4, 5, 6]
+const middlewares = [
+  (req, res) => {
+    console.log('middleware1', req)
+  },
+  (req, res) => {
+    console.log('middleware2', req)
+  },
+  (req, res) => {
+    console.log('middleware3', req)
+  },
+]
+
+;(async function() {
+  // traverse items with async function
+  await asyncEach(items, async (item, i) => {
+    return await Promise.resolve(item + i)
+  }).then(newItems => console.log(newItems))
+
+  // iterate items with `next`
+  await asyncI(items, (item, i, next, stop) => {
+    console.log('1:' + item)
+    setTimeout(() => {
+      next()
+    }, 500)
+  })
+
+  //  iterate items with no `next`
+  // if you return a rejected promise, the pipeline will break there
+  await asyncI(items, (item, i) => {
+    return new Promise((resolve) => {
+      console.log('2:' + item)
+      setTimeout(() => {
+        resolve()
+      }, 500)
+    })
+  })
+
+  // run an array of functions in serial
+  await asyncS(middlewares, { type: 'serial' }, {}).then(() => {
+    console.log('serial middlewares finished.')
+  })
+
+  // run an array of function in parallel
+  await asyncP(middlewares, { type: 'parallel' }, {}).then(() => {
+    console.log('parallel middlewares finished.')
+  })
+
+  // use a rejected promise to stop serial
+  let m2 = Object.assign([], middlewares)
+  m2[1] = (req, res) => {
+    return Promise.reject('break')
+  }
+  await asyncS(m2, { type: 'break' }, {}).then(() => {
+    console.log('break middlewares finished.')
+  }).catch(e => console.log(e))
+})()
+</script>

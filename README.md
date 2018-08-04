@@ -14,11 +14,12 @@ ES6:
 
 ```
 import {
-  asyncFn,
+  $async,
+  $await,
   asyncEach,
-  asyncIterate,
-  asyncSerial,
-  asyncParallel,
+  asyncI,
+  asyncS,
+  asyncP,
 } from 'hello-async/src/hello-async'
 ```
 
@@ -26,27 +27,122 @@ CommonJS:
 
 ```
 const {
-  asyncFn,
+  $async,
+  $await,
   asyncEach,
-  asyncIterate,
-  asyncSerial,
-  asyncParallel,
+  asyncI,
+  asyncS,
+  asyncP,
 } = require('hello-async')
 ```
 
+In browser:
+
+```
+<script src="node_modules/hello-async/dist/hello-async.js"></script>
+<script>
+const {
+  $async,
+  $await,
+  asyncEach,
+  asyncI,
+  asyncS,
+  asyncP,
+} = HelloAsync
+</script>
+```
+
+Notice: native `Promise` should be supported.
+
 ## API
 
-### asyncFn(fn)
+### $async(fn)
 
 Convert a function to be async function, no matter it is a normal function or an async function.
 
 ```
+// usage1:
 let fn = (arg1) => { ... }
 let afn = asyncFn(fn)
-await afn('xxx')
+
+// usage2:
+let fn = async (arg1) => { ... }
+let afn = asyncFn(fn)
 ```
 
-### asyncEach(items, async fn)
+It is useful when you do not know whether a function is an aysnc function or not in runtime.
+
+```
+function async calc(fn) {
+  let v = await $async(fn)() // here I do not know whether `fn` is an async function or not
+  return v
+}
+```
+
+### $await(input[, fn])
+
+Convert a normal value or a promise to be a promise.
+
+```
+let x = 3
+let a = $await(x) // a is a promise which resolve with `x`
+let b = $await(a, a => a + 12) // b is a promise which resolve with `x + 12`
+
+b.then(b => console.log(b)) // 16
+```
+
+Here, `a` and `b` are promises which resovle `fn` return value.
+
+- input: a normal value or a promise instance
+- fn: a function which use `input` to calculate, can be a normal function or an async function
+- @return: a promise defer which resolved whith `fn` return value
+
+Use $async and $await to write async function like:
+
+```
+const get = $async(function(url) {
+  let res = $await(fetch(url))
+  let data = $await(res, res => res.json())
+  return data
+})
+
+/*
+async function get(url) {
+  let res = await fetch(url)
+  let data = await res.json()
+  return data
+}
+*/
+
+get('http://xxx').then(data => { ... })
+```
+
+Here `get` function is defined very like an `async function`.
+However, the syntax of `await` is more easy than `$await`, here we have to use a function to calculate the value.
+
+```
+// usage1: with a normal value
+let defer = $await('xxx')
+
+// usage2: with a promise
+let defer = $await(Promise.resolve('xxx'))
+
+// usage3: with a normal value and a normal function
+let defer = $await('xxx', x => x + 'xx')
+
+// usage4: with a promise and normal function
+let defer = $await(Promise.resolve('xxx'), x => x + 'xx')
+
+// usage5: with a normal value and an async function
+let defer = $await(url, async url => await fetch(url))
+```
+
+As you see, the first parameter can be a normal value or a promise, the second parameter can be a normal function or an async function.
+If the first parameter is a promise, its resolve value will be used as the second paramater function's parameter.
+The second parameter should be a function, its return value will be used as $await value.
+If the second parameter is an async function, the resolve value will be used as $await return value.
+
+### asyncEach(items, fn)
 
 Traverse items with async function.
 
@@ -60,14 +156,17 @@ let newItems = await asyncEach(items, async (item, i) => {
 
 New items will be returned when all async function finish.
 
-### asyncIterate(items, async fn)
+### asyncIterate(items, fn)
+
+_alias: asyncI(items, async fn)_
 
 Iterate items with async function.
 
 ```
 let items = []
-let newItems = await asyncEach(items, async (item, i, next, stop) => {
+let newItems = await asyncIterate(items, async (item, i, next, stop) => {
   // ...
+  setTimeout(next, 1000)
 })
 ```
 
@@ -79,7 +178,17 @@ Iterate to next item.
 
 Stop iterating. The left iterator functions will not run any more.
 
+Notice: `next()` or `stop()` should be called anyway! If you do not pass `next`, it will be treated as a resolved promise.
+
+```
+await asyncI(items, (item, i) => {
+  console.log(item, i)
+})
+```
+
 ### asyncSerial(fns, ...args)
+
+_alias: asyncS(fns, ...args)_
 
 Calculate with args by async functions in serial.
 
@@ -92,8 +201,11 @@ let result = await asyncSerial(fns, xx1, xx2)
 ```
 
 Async functions will run one by one after each resolved, if one rejected, the letf ones will not run any more.
+It will resolve with the last async function's resolve value.
 
 ### asyncParallel(fns, ...args)
+
+_alias: asyncP(fns, ...args)_
 
 Calculate with args by async functions in parallel.
 

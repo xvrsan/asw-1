@@ -1,4 +1,4 @@
-import asyncFn from './async-fn'
+import { $async, $await } from './async-await'
 
 /**
  * traverse items with async function
@@ -15,9 +15,15 @@ import asyncFn from './async-fn'
  * })
  */
 export default function asyncEach(items, fn) {
-  return Promise.resolve().then(() => {
+  if (!Array.isArray(items)) {
+    throw new Error('asyncEach should receive an array as first parameter.')
+  }
+  if (typeof fn !== 'function') {
+    throw new Error('asyncEach should receive a function as the second parameter.')
+  }
+  return $await(items, (items) => {
     let promises = []
-    let afn = asyncFn(fn)
+    let afn = $async(fn)
     items.forEach((item, i) => {
       promises.push(afn(item, i))
     })

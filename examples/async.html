@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<script src="../dist/hello-async.js"></script>
+<script>
+const { $async } = HelloAsync
+
+// convert a normal function to be an async function
+let afn1 = $async(() => {
+  return 1
+})
+afn1().then(v => console.log(v))
+
+// can receive an async function
+let afn2 = $async(async () => {
+  return await Promise.resolve(2)
+})
+afn2().then(v => console.log(v))
+</script>

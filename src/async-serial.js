@@ -1,4 +1,4 @@
-import asyncFn from './async-fn'
+import { $async, $await } from './async-await'
 
 /**
  * run async function in serial, async function will run one by one,
@@ -11,7 +11,15 @@ import asyncFn from './async-fn'
  * let v = await asyncSerial(fns, arg1, arg2)
  */
 export default function asyncSerial(fns, ...args) {
-  return Promise.resolve().then(() => {
+  if (!Array.isArray(fns)) {
+    throw new Error('asyncSerial should receive an array as first parameter.')
+  }
+  fns.forEach((fn) => {
+    if (typeof fn !== 'function') {
+      throw new Error('asyncSerial should receive an array of functions as first parameter.')
+    }
+  })
+  return $await(fns, (fns) => {
     let i = 0
     let through = (params) => {
       let fn = fns[i]
@@ -19,7 +27,7 @@ export default function asyncSerial(fns, ...args) {
         return params
       }
       i ++
-      let afn = asyncFn(fn)
+      let afn = $async(fn)
       return afn(...args).then(through)
     }
     return through(args)

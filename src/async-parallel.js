@@ -1,4 +1,4 @@
-import asyncFn from './async-fn'
+import { $async, $await } from './async-await'
 
 /**
  * run async functions in parallel, functions will begin at the same time,
@@ -10,11 +10,19 @@ import asyncFn from './async-fn'
  * let v = await asyncSerial(fns, arg1, arg2)
  */
 export default function asyncParallel(fns, ...args) {
-  return Promise.resolve().then(() => {
+  if (!Array.isArray(fns)) {
+    throw new Error('asyncParallel should receive an array as first parameter.')
+  }
+  fns.forEach((fn) => {
+    if (typeof fn !== 'function') {
+      throw new Error('asyncParallel should receive an array of functions as first parameter.')
+    }
+  })
+  return $await(fns, (fns) => {
     let promises = []
     let result = args
     fns.forEach((fn) => {
-      let afn = asyncFn(fn)
+      let afn = $async(fn)
       let defer = afn(...args).then(res => result = res)
       promises.push(defer)
     })

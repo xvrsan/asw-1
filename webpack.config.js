@@ -19,7 +19,7 @@ module.exports = {
   },
   plugins: [
     bufferify(function(content) {
-      content = content.replace('__webpack_exports__["default"] = (HelloAsync);', 'module.exports = HelloAsync;')
+      content = content.replace('exports.default = HelloAsync;', 'module.exports = HelloAsync;')
       return content
     }),
   ],

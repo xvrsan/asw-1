@@ -1,23 +1,31 @@
 import asyncEach from './async-each'
-import asyncFn from './async-fn'
+import { $async, $await } from './async-await'
 import asyncIterate from './async-iterate'
 import asyncSerial from './async-serial'
 import asyncParallel from './async-parallel'
 
 const HelloAsync = {
   asyncEach,
-  asyncFn,
   asyncIterate,
+  asyncI: asyncIterate,
   asyncSerial,
+  asyncS: asyncSerial,
   asyncParallel,
+  asyncP: asyncParallel,
+  $async,
+  $await,
 }
 
 export {
   asyncEach,
-  asyncFn,
   asyncIterate,
+  asyncIterate as asyncI,
   asyncSerial,
+  asyncSerial as asyncS,
   asyncParallel,
+  asyncParallel as asyncP,
+  $async,
+  $await,
 }
 
 export default HelloAsync
