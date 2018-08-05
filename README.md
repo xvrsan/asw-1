@@ -58,7 +58,7 @@ Notice: native `Promise` should be supported.
 
 _Look into [babel-plugin-transform-async-await](https://github.com/tangshuang/babel-plugin-transform-async-await) for native use with babel, maybe you do not need `$async` and `$await`._
 
-### $async(fn[, defer])
+### $async(fn)
 
 Convert a function to be async function, no matter it is a normal function or an async function.
 
@@ -81,38 +81,7 @@ function async calc(fn) {
 }
 ```
 
-**defer**
-
-_default: false_
-
-For ES default behaviour, async function will run synchronously before reach `await` syntax, for example:
-
-```
-async function get(url) {
-  console.log(1)
-  await fetch(url)
-  console.log(2)
-}
-get('...')
-console.log(3)
-```
-
-You will see in console `1 -> 3 -> 2`.
-However, if you want to convert a function to be a completely synchronous function, you can set `defer` to be true:
-
-```
-const get = $async(function(url) {
-  console.log(1)
-  $await(fetch(url), () => console.log(2))
-}, true)
-get('...')
-console.log(3)
-```
-
-It will console log `3 -> 1 -> 2`.
-So use `defer` when you need.
-
-### $await(input[, then, direct])
+### $await(input[, then])
 
 Convert a normal value or a promise to be a promise.
 
@@ -127,7 +96,7 @@ b.then(b => console.log(b)) // 16
 Here, `a` and `b` are promises which resovle `fn` return value.
 
 - input: a normal value or a promise instance
-- fn: a function which use `input` to calculate, can be a normal function or an async function
+- then: a function which use `input` to calculate, can be a normal function or an async function
 - @return: a promise defer which resolved whith `fn` return value
 
 Use $async and $await to write async function like:
@@ -174,18 +143,6 @@ As you see, the first parameter can be a normal value or a promise, the second p
 If the first parameter is a promise, its resolve value will be used as the second paramater function's parameter.
 The second parameter should be a function, its return value will be used as $await value.
 If the second parameter is an async function, the resolve value will be used as $await return value.
-
-**direct**
-
-_defualt: false_
-
-Whether to return `input` wrapped by `then` directly.
-
-```
-let v = $await(1, () => 2, true) // v will be 2
-```
-
-It is useful in some case you need.
 
 ### asyncEach(items, fn)
 
