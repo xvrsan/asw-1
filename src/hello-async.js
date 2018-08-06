@@ -6,6 +6,7 @@ import asyncParallel from './async-parallel'
 
 const HelloAsync = {
   asyncEach,
+  asyncE: asyncEach,
   asyncIterate,
   asyncI: asyncIterate,
   asyncSerial,
@@ -18,6 +19,7 @@ const HelloAsync = {
 
 export {
   asyncEach,
+  asyncEach as asyncE,
   asyncIterate,
   asyncIterate as asyncI,
   asyncSerial,

@@ -16,7 +16,7 @@ ES6:
 import {
   $async,
   $await,
-  asyncEach,
+  asyncE,
   asyncI,
   asyncS,
   asyncP,
@@ -29,7 +29,7 @@ CommonJS:
 const {
   $async,
   $await,
-  asyncEach,
+  asyncE,
   asyncI,
   asyncS,
   asyncP,
@@ -44,7 +44,7 @@ In browser:
 const {
   $async,
   $await,
-  asyncEach,
+  asyncE,
   asyncI,
   asyncS,
   asyncP,
@@ -83,9 +83,9 @@ function async calc(fn) {
 
 **defer**
 
-_default: false_
+_default: true_
 
-For ES default behaviour, async function will run synchronously before reach `await` syntax, for example:
+For ES default behaviour, async function will run synchronously before reach first `await` syntax, for example:
 
 ```
 async function get(url) {
@@ -95,24 +95,30 @@ async function get(url) {
 }
 get('...')
 console.log(3)
+
+// => 1
+// => 3
+// => 2
 ```
 
-You will see in console `1 -> 3 -> 2`.
 However, if you want to convert a function to be a completely synchronous function, you can set `defer` to be true:
 
 ```
 const get = $async(function(url) {
   console.log(1)
   $await(fetch(url), () => console.log(2))
-}, true)
+})
 get('...')
 console.log(3)
+
+// => 3
+// => 1
+// => 2
 ```
 
-It will console log `3 -> 1 -> 2`.
-So use `defer` when you need.
+So use `defer` when you need to act as native async function.
 
-### $await(input[, then, direct])
+### $await(input[, fn, direct])
 
 Convert a normal value or a promise to be a promise.
 
@@ -189,6 +195,8 @@ It is useful in some case you need.
 
 ### asyncEach(items, fn)
 
+_alias: asyncE(items, fn)_
+
 Traverse items with async function.
 
 ```
@@ -203,7 +211,7 @@ New items will be returned when all async function finish.
 
 ### asyncIterate(items, fn)
 
-_alias: asyncI(items, async fn)_
+_alias: asyncI(items, fn)_
 
 Iterate items with async function.
 
