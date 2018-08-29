@@ -25,7 +25,7 @@ export default function asyncMap(items, fn) {
     let promises = []
     let afn = $async(fn)
     items.forEach((item, i) => {
-      promises.push(afn(item, i, items))
+      promises.push(afn(item, i))
     })
     return Promise.all(promises)
   })
