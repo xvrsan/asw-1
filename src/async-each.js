@@ -1,14 +1,13 @@
 import { $async, $await } from './async-await'
 
 /**
- * traverse items with async function
- * @param {array} items
- * @param {function} fn
- * Notice: fn is not an iterator function, it will run in parallel
- * @return {array} Promise with new items resolved
+ * traverse items with async function one by one
+ * @param {Array} items
+ * @param {Function} fn
+ * @return {Promise}
  * @example
  * let items = [...]
- * let newItems = await asyncEach(items, async (item, i) => {
+ * await asyncEach(items, async (item, i) => {
  *   let res = await fetch(url, item)
  *   let data = await res.json()
  *   return data
@@ -22,11 +21,20 @@ export default function asyncEach(items, fn) {
     throw new Error('asyncEach should receive a function as the second parameter.')
   }
   return $await(items, (items) => {
-    let promises = []
-    let afn = $async(fn)
-    items.forEach((item, i) => {
-      promises.push(afn(item, i))
+    return new Promise((resolve, reject) => {
+      let i = 0
+      let through = () => {
+        let item = items[i]
+        if (!item) {
+          resolve()
+          return
+        }
+        let afn = $async(fn)
+        return new Promise((next, stop) => {
+          afn(item, i ++).then(next).catch(stop)
+        }).then(through).catch(reject)
+      }
+      through()
     })
-    return Promise.all(promises)
   })
 }
