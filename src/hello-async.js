@@ -1,5 +1,6 @@
-import asyncEach from './async-each'
 import { $async, $await } from './async-await'
+import asyncEach from './async-each'
+import asyncMap from './async-map'
 import asyncIterate from './async-iterate'
 import asyncSerial from './async-serial'
 import asyncParallel from './async-parallel'
@@ -7,6 +8,8 @@ import asyncParallel from './async-parallel'
 const HelloAsync = {
   asyncEach,
   asyncE: asyncEach,
+  asyncMap,
+  asyncM: asyncMap,
   asyncIterate,
   asyncI: asyncIterate,
   asyncSerial,
@@ -19,13 +22,15 @@ const HelloAsync = {
 
 export {
   asyncEach,
-  asyncEach as asyncE,
+  asyncE: asyncEach,
+  asyncMap,
+  asyncM: asyncMap,
   asyncIterate,
-  asyncIterate as asyncI,
+  asyncI: asyncIterate,
   asyncSerial,
-  asyncSerial as asyncS,
+  asyncS: asyncSerial,
   asyncParallel,
-  asyncParallel as asyncP,
+  asyncP: asyncParallel,
   $async,
   $await,
 }
