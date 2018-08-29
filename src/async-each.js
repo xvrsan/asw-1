@@ -14,12 +14,6 @@ import { $async, $await } from './async-await'
  * })
  */
 export default function asyncEach(items, fn) {
-  if (!Array.isArray(items)) {
-    throw new Error('asyncEach should receive an array as first parameter.')
-  }
-  if (typeof fn !== 'function') {
-    throw new Error('asyncEach should receive a function as the second parameter.')
-  }
   return $await(items, (items) => {
     return new Promise((resolve, reject) => {
       let i = 0
