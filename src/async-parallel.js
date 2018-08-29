@@ -10,14 +10,6 @@ import { $async, $await } from './async-await'
  * let v = await asyncSerial(fns, arg1, arg2)
  */
 export default function asyncParallel(fns, ...args) {
-  if (!Array.isArray(fns)) {
-    throw new Error('asyncParallel should receive an array as first parameter.')
-  }
-  fns.forEach((fn) => {
-    if (typeof fn !== 'function') {
-      throw new Error('asyncParallel should receive an array of functions as first parameter.')
-    }
-  })
   return $await(fns, (fns) => {
     let promises = []
     let result = args
