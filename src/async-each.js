@@ -1,4 +1,5 @@
-import { $async, $await } from './async-await'
+import { $await } from './async-await'
+import asyncI from './async-iterate'
 
 /**
  * traverse items with async function one by one
@@ -14,21 +15,5 @@ import { $async, $await } from './async-await'
  * })
  */
 export default function asyncEach(items, fn) {
-  return $await(items, (items) => {
-    return new Promise((resolve, reject) => {
-      let i = 0
-      let through = () => {
-        let item = items[i]
-        if (!item) {
-          resolve()
-          return
-        }
-        let afn = $async(fn)
-        return new Promise((next, stop) => {
-          afn(item, i ++).then(next).catch(stop)
-        }).then(through).catch(reject)
-      }
-      through()
-    })
-  })
+  return asyncI(items, (item, i, next) => $await(fn(item, i), next))
 }

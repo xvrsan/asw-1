@@ -22,15 +22,15 @@ const HelloAsync = {
 
 export {
   asyncEach,
-  asyncE: asyncEach,
   asyncMap,
-  asyncM: asyncMap,
   asyncIterate,
-  asyncI: asyncIterate,
   asyncSerial,
-  asyncS: asyncSerial,
   asyncParallel,
-  asyncP: asyncParallel,
+  asyncEach as asyncE,
+  asyncMap as asyncM,
+  asyncIterate as asyncI,
+  asyncSerial as asyncS,
+  asyncParallel as asyncP,
   $async,
   $await,
 }

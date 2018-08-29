@@ -224,6 +224,7 @@ let newItems = await asyncEach(items, async (item, i) => {
 ```
 
 New items will be returned when all async function finish.
+In a forEach loop, `fn` will run in parallel.
 
 ### asyncIterate(items, fn)
 

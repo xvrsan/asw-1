@@ -20,6 +20,9 @@ module.exports = {
   plugins: [
     bufferify(function(content) {
       content = content.replace('exports.default = HelloAsync;', 'module.exports = HelloAsync;')
+      content = content.replace(/exports\.(.*?)\.default;/g, '')
+      content = content.replace(/exports\.\$async(.*?)\.\$async;/, '')
+      content = content.replace(/exports\.\$await(.*?)\.\$await;/, '')
       return content
     }),
   ],

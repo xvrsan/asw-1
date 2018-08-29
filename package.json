@@ -1,9 +1,10 @@
 {
   "name": "hello-async",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "A library to help developer use async functions as promises.",
   "main": "dist/hello-async.js",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "webpack"
   },
   "repository": {

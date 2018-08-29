@@ -2,7 +2,7 @@
 
 <script src="../dist/hello-async.js"></script>
 <script>
-const { asyncEach, asyncI, asyncS, asyncP } = HelloAsync
+const { asyncM, asyncI, asyncS, asyncP } = HelloAsync
 const items = [1, 2, 3, 4, 5, 6]
 const middlewares = [
   (req, res) => {
@@ -18,7 +18,7 @@ const middlewares = [
 
 ;(async function() {
   // traverse items with async function
-  await asyncEach(items, async (item, i) => {
+  await asyncM(items, async (item, i) => {
     return await Promise.resolve(item + i)
   }).then(newItems => console.log(newItems))
 
