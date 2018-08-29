@@ -11,9 +11,6 @@
  * })
  */
 export function $async(fn, defer = true) {
-  if (typeof fn !== 'function') {
-    throw new Error('$async should receive a function as parameter.')
-  }
   return (...args) => {
     if (defer) {
       return new Promise((resolve, reject) => {
@@ -21,8 +18,9 @@ export function $async(fn, defer = true) {
       })
     }
 
+    // native async function behaviour
     try {
-      return Promise.resolve(fn(...args));
+      return Promise.resolve(fn(...args))
     } 
     catch(e) {
       return Promise.reject(e);
@@ -48,8 +46,8 @@ export function $async(fn, defer = true) {
  */
 export function $await(input, fn, direct = false) {
   if (direct) {
-		return typeof fn === 'function' ? fn(input) : input;
-	}
+    return typeof fn === 'function' ? fn(input) : input;
+  }
 
   const defer = (input) => {
     return Promise.resolve(input)
