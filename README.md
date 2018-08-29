@@ -17,6 +17,7 @@ import {
   $async,
   $await,
   asyncE,
+  asyncM,
   asyncI,
   asyncS,
   asyncP,
@@ -30,6 +31,7 @@ const {
   $async,
   $await,
   asyncE,
+  asyncM,
   asyncI,
   asyncS,
   asyncP,
@@ -45,6 +47,7 @@ const {
   $async,
   $await,
   asyncE,
+  asyncM,
   asyncI,
   asyncS,
   asyncP,
@@ -197,7 +200,20 @@ It is useful in some case you need.
 
 _alias: asyncE(items, fn)_
 
-Traverse items with async function.
+Traverse items with async function one by one.
+
+```
+let items = [...]
+await asyncEach(items, async (item, i) => {
+  // ...
+})
+```
+
+### asyncMap(items, fn)
+
+_alias: asyncM(items, fn)_
+
+Traverse items with async function and return an new array in a promise.
 
 ```
 let items = [...]
@@ -217,7 +233,7 @@ Iterate items with async function.
 
 ```
 let items = []
-let newItems = await asyncIterate(items, async (item, i, next, stop) => {
+await asyncIterate(items, async (item, i, next, stop) => {
   // ...
   setTimeout(next, 1000)
 })
@@ -250,11 +266,10 @@ let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
-let result = await asyncSerial(fns, xx1, xx2)
+await asyncSerial(fns, xx1, xx2)
 ```
 
-Async functions will run one by one after each resolved, if one rejected, the letf ones will not run any more.
-It will resolve with the last async function's resolve value.
+Async functions will run with ...args one by one after each resolved, if one rejected, the letf ones will not run any more.
 
 ### asyncParallel(fns, ...args)
 
@@ -267,7 +282,7 @@ let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
-let result = await asyncParallel(fns, xx1, xx2)
+await asyncParallel(fns, xx1, xx2)
 ```
 
-Async functions will start at the same time, if one rejected, you will not get result, however anthors will run.
+Async functions will start with ...args at the same time, if one rejected, anthors will still run.
