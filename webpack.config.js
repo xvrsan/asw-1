@@ -23,6 +23,7 @@ module.exports = {
       content = content.replace(/exports\.(.*?)\.default;/g, '')
       content = content.replace(/exports\.\$async(.*?)\.\$async;/, '')
       content = content.replace(/exports\.\$await(.*?)\.\$await;/, '')
+      content = content.replace('window', 'typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : this')
       return content
     }),
   ],
