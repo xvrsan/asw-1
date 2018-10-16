@@ -1,4 +1,4 @@
-import { $async, $await } from './async-await'
+import { async$, await$ } from './async-await'
 
 /**
  * iterate items with async function
@@ -18,7 +18,7 @@ import { $async, $await } from './async-await'
  * })
  */
 export default function asyncIterate(items, fn) {
-  return $await(items, (items) => {
+  return await$(items, (items) => {
     return new Promise((resolve, reject) => {
       let i = 0
       let through = () => {
@@ -27,7 +27,7 @@ export default function asyncIterate(items, fn) {
           resolve()
           return
         }
-        let afn = $async(fn)
+        let afn = async$(fn)
         return new Promise((next, stop) => {
           afn(item, i ++, next, stop)
         }).then(through).catch(reject)

@@ -1,4 +1,4 @@
-import { $async, $await } from './async-await'
+import { async$, await$ } from './async-await'
 import asyncEach from './async-each'
 import asyncMap from './async-map'
 import asyncIterate from './async-iterate'
@@ -11,28 +11,13 @@ export {
   asyncIterate,
   asyncSerial,
   asyncParallel,
+  async$,
+  await$,
   asyncEach as asyncE,
   asyncMap as asyncM,
   asyncIterate as asyncI,
   asyncSerial as asyncS,
   asyncParallel as asyncP,
-  $async,
-  $await,
+  async$ as $async,
+  await$ as $await,
 }
-
-const HelloAsync = {
-  asyncEach,
-  asyncE: asyncEach,
-  asyncMap,
-  asyncM: asyncMap,
-  asyncIterate,
-  asyncI: asyncIterate,
-  asyncSerial,
-  asyncS: asyncSerial,
-  asyncParallel,
-  asyncP: asyncParallel,
-  $async,
-  $await,
-}
-
-export default HelloAsync

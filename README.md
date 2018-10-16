@@ -14,8 +14,8 @@ ES6:
 
 ```
 import {
-  $async,
-  $await,
+  async$,
+  await$,
   asyncE,
   asyncM,
   asyncI,
@@ -28,8 +28,8 @@ CommonJS:
 
 ```
 const {
-  $async,
-  $await,
+  async$,
+  await$,
   asyncE,
   asyncM,
   asyncI,
@@ -44,14 +44,14 @@ In browser:
 <script src="node_modules/hello-async/dist/hello-async.js"></script>
 <script>
 const {
-  $async,
-  $await,
+  async$,
+  await$,
   asyncE,
   asyncM,
   asyncI,
   asyncS,
   asyncP,
-} = HelloAsync
+} = window['hello-async']
 </script>
 ```
 
@@ -59,18 +59,16 @@ Notice: native `Promise` should be supported.
 
 ## API
 
-_Look into [babel-plugin-transform-async-await](https://github.com/tangshuang/babel-plugin-transform-async-await) for native use with babel, maybe you do not need `$async` and `$await`._
-
-### $async(fn[, defer])
+### async$(fn[, defer])
 
 Convert a function to be async function, no matter it is a normal function or an async function.
 
 ```
-// usage1:
+// normal function:
 let fn = (arg1) => { ... }
 let afn = asyncFn(fn)
 
-// usage2:
+// async function:
 let fn = async (arg1) => { ... }
 let afn = asyncFn(fn)
 ```
@@ -79,14 +77,14 @@ It is useful when you do not know whether a function is an aysnc function or not
 
 ```
 function async calc(fn) {
-  let v = await $async(fn)() // here I do not know whether `fn` is an async function or not
+  let v = await async$(fn)() // here I do not know whether `fn` is an async function or not
   return v
 }
 ```
 
-**defer**
+**navtive**
 
-_default: true_
+_default: false_
 
 For ES default behaviour, async function will run synchronously before reach first `await` syntax, for example:
 
@@ -104,31 +102,30 @@ console.log(3)
 // => 2
 ```
 
-However, if you want to convert a function to be a completely synchronous function, you can set `defer` to be true:
+As default, `async$` converts a function to be a completely synchronous function.
+If you want to use native behaviour, you can set `native` to be `true`:
 
 ```
-const get = $async(function(url) {
+const get = async$(function(url) {
   console.log(1)
-  $await(fetch(url), () => console.log(2))
-})
+  await$(fetch(url), () => console.log(2))
+}, true) // notice here
 get('...')
 console.log(3)
 
-// => 3
 // => 1
+// => 3
 // => 2
 ```
 
-So use `defer` when you need to act as native async function.
-
-### $await(input[, fn, direct])
+### await$(input, fn)
 
 Convert a normal value or a promise to be a promise.
 
 ```
 let x = 3
-let a = $await(x) // a is a promise which resolve with `x`
-let b = $await(a, a => a + 12) // b is a promise which resolve with `x + 12`
+let a = await$(x) // a is a promise which resolve with `x`
+let b = await$(a, a => a + 12) // b is a promise which resolve with `x + 12`
 
 b.then(b => console.log(b)) // 16
 ```
@@ -139,12 +136,12 @@ Here, `a` and `b` are promises which resovle `fn` return value.
 - fn: a function which use `input` to calculate, can be a normal function or an async function
 - @return: a promise defer which resolved whith `fn` return value
 
-Use $async and $await to write async function like:
+Use async$ and await$ to write async function like:
 
 ```
-const get = $async(function(url) {
-  let res = $await(fetch(url))
-  let data = $await(res, res => res.json())
+const get = async$(function(url) {
+  let res = await$(fetch(url))
+  let data = await$(res, res => res.json())
   return data
 })
 
@@ -160,41 +157,29 @@ get('http://xxx').then(data => { ... })
 ```
 
 Here `get` function is defined very like an `async function`.
-However, the syntax of `await` is more easy than `$await`, here we have to use a function to calculate the value.
+However, the syntax of `await` is much more easy than `await$`, here we have to use a function to calculate the value.
 
 ```
 // usage1: with a normal value
-let defer = $await('xxx')
+let defer = await$('xxx')
 
 // usage2: with a promise
-let defer = $await(Promise.resolve('xxx'))
+let defer = await$(Promise.resolve('xxx'))
 
 // usage3: with a normal value and a normal function
-let defer = $await('xxx', x => x + 'xx')
+let defer = await$('xxx', x => x + 'xx')
 
 // usage4: with a promise and normal function
-let defer = $await(Promise.resolve('xxx'), x => x + 'xx')
+let defer = await$(Promise.resolve('xxx'), x => x + 'xx')
 
 // usage5: with a normal value and an async function
-let defer = $await(url, async url => await fetch(url))
+let defer = await$(url, async url => await fetch(url))
 ```
 
 As you see, the first parameter can be a normal value or a promise, the second parameter can be a normal function or an async function.
 If the first parameter is a promise, its resolve value will be used as the second paramater function's parameter.
-The second parameter should be a function, its return value will be used as $await value.
-If the second parameter is an async function, the resolve value will be used as $await return value.
-
-**direct**
-
-_defualt: false_
-
-Whether to return `input` wrapped by `then` directly.
-
-```
-let v = $await(1, () => 2, true) // v will be 2
-```
-
-It is useful in some case you need.
+The second parameter should be a function, its return value will be used as await$ return value.
+If the second parameter is an async function, the resolve value will be used as await$ return value.
 
 ### asyncEach(items, fn)
 
@@ -204,7 +189,7 @@ Traverse items with async function one by one.
 
 ```
 let items = [...]
-await asyncEach(items, async (item, i) => {
+await asyncEach(items, async (item, i, arr) => {
   // ...
 })
 ```
