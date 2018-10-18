@@ -1,6 +1,6 @@
 {
   "name": "hello-async",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A library to help developer use async functions as promises.",
   "main": "dist/hello-async.js",
   "scripts": {

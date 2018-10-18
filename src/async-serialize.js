@@ -10,7 +10,7 @@ import { async$, await$ } from './async-await'
  * let fns = []
  * let v = await asyncSerial(fns, arg1, arg2)
  */
-export default function asyncSerial(fns, ...args) {
+export default function asyncSerialize(fns, ...args) {
   return await$(fns, (fns) => {
     let i = 0
     let through = (params) => {

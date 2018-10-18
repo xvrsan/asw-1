@@ -241,7 +241,7 @@ await asyncI(items, (item, i) => {
 })
 ```
 
-### asyncSerial(fns, ...args)
+### asyncSerialize(fns, ...args)
 
 _alias: asyncS(fns, ...args)_
 
@@ -252,12 +252,12 @@ let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
-await asyncSerial(fns, xx1, xx2)
+await asyncSerialize(fns, xx1, xx2)
 ```
 
 Async functions will run with ...args one by one after each resolved, if one rejected, the letf ones will not run any more.
 
-### asyncParallel(fns, ...args)
+### asyncParallelize(fns, ...args)
 
 _alias: asyncP(fns, ...args)_
 
@@ -268,7 +268,7 @@ let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
-await asyncParallel(fns, xx1, xx2)
+await asyncParallelize(fns, xx1, xx2)
 ```
 
 Async functions will start with ...args at the same time, if one rejected, anthors will still run.

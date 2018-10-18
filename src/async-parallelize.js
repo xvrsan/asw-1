@@ -9,7 +9,7 @@ import { async$, await$ } from './async-await'
  * let fns = []
  * let v = await asyncSerial(fns, arg1, arg2)
  */
-export default function asyncParallel(fns, ...args) {
+export default function asyncParallelize(fns, ...args) {
   return await$(fns, (fns) => {
     let promises = []
     let result = args
