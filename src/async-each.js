@@ -1,4 +1,4 @@
-import { await$ } from './async-await'
+import $await from './await'
 import asyncI from './async-iterate'
 
 /**
@@ -15,5 +15,5 @@ import asyncI from './async-iterate'
  * })
  */
 export default function asyncEach(items, fn) {
-  return asyncI(items, (item, i, next) => await$(fn(item, i, items), next))
+  return asyncI(items, (item, i, next) => $await(fn(item, i, items), next))
 }

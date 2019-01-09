@@ -2,7 +2,7 @@
 
 <script src="../dist/hello-async.js"></script>
 <script>
-const { $async } = HelloAsync
+const { $async } = window['hello-async']
 
 // convert a normal function to be an async function
 let afn1 = $async(() => {

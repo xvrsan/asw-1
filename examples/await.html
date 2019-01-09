@@ -2,7 +2,7 @@
 
 <script src="../dist/hello-async.js"></script>
 <script>
-const { $await, $async } = HelloAsync
+const { $await, $async } = window['hello-async']
 
 // conver a normal value to a promise
 let a1 = $await(1)

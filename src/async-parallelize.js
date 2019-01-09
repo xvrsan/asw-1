@@ -1,4 +1,5 @@
-import { async$, await$ } from './async-await'
+import $async from './async'
+import $await from './await'
 
 /**
  * run async functions in parallel, functions will begin at the same time,
@@ -10,14 +11,13 @@ import { async$, await$ } from './async-await'
  * let v = await asyncSerial(fns, arg1, arg2)
  */
 export default function asyncParallelize(fns, ...args) {
-  return await$(fns, (fns) => {
+  return $await(fns, (fns) => {
     let promises = []
-    let result = args
     fns.forEach((fn) => {
-      let afn = async$(fn)
-      let defer = afn(...args).then(res => result = res)
+      let afn = $async(fn)
+      let defer = afn(...args)
       promises.push(defer)
     })
-    return Promise.all(promises).then(() => result)
+    return Promise.all(promises)
   })
 }

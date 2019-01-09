@@ -1,6 +1,6 @@
 {
   "name": "hello-async",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "A library to help developer use async functions as promises.",
   "main": "dist/hello-async.js",
   "scripts": {
@@ -25,7 +25,6 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "webpack": "^4.16.3",
-    "webpack-bufferify": "^1.0.1",
     "webpack-cli": "^3.1.0"
   },
   "dependencies": {}
