@@ -6,7 +6,7 @@ module.exports = {
     filename: 'hello-async.js',
     library: 'hello-async',
     libraryTarget: 'umd',
-    globalObject: 'typeof window !== undefined ? window : typeof global !== undefined ? global : typeof self !== undefined ? self : this',
+    globalObject: `typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : this`,
   },
   module: {
     rules: [
@@ -16,4 +16,5 @@ module.exports = {
       },
     ]
   },
+  devtool: 'sourcemap',
 }
