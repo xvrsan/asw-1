@@ -1,10 +1,10 @@
 module.exports = {
   mode: 'none',
-  entry: __dirname + '/src/hello-async.js',
+  entry: __dirname + '/src/asw.js',
   output: {
     path: __dirname + '/dist',
-    filename: 'hello-async.js',
-    library: 'hello-async',
+    filename: 'asw.js',
+    library: 'asw',
     libraryTarget: 'umd',
     globalObject: `typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : this`,
   },

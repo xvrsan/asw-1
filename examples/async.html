@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<script src="../dist/hello-async.js"></script>
+<script src="../dist/asw.js"></script>
 <script>
-const { $async } = window['hello-async']
+const { asyncx } = window['asw']
 
 // convert a normal function to be an async function
-let afn1 = $async(() => {
+let afn1 = asyncx(() => {
   return 1
 })
 afn1().then(v => console.log(v))
 
 // can receive an async function
-let afn2 = $async(async () => {
+let afn2 = asyncx(async () => {
   return await Promise.resolve(2)
 })
 afn2().then(v => console.log(v))

@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 
-<script src="../dist/hello-async.js"></script>
+<script src="../dist/asw.js"></script>
 <script>
-const { $await, $async } = window['hello-async']
+const { awaitx, asyncx } = window['asw']
 
 // conver a normal value to a promise
-let a1 = $await(1)
+let a1 = awaitx(1)
 a1.then(v => console.log(v))
 
 // can receive a promise
-let a2 = $await(Promise.resolve(2))
+let a2 = awaitx(Promise.resolve(2))
 a2.then(v => console.log(v))
 
 // pass a normal function
-let a3 = $await(3, x => x + 1)
+let a3 = awaitx(3, x => x + 1)
 a3.then(v => console.log(v))
 
 // pass an async function
-let a4 = $await(4, async x => await Promise.resolve(x + 1))
+let a4 = awaitx(4, async x => await Promise.resolve(x + 1))
 a4.then(v => console.log(v))
 
-// use previous $await return value (a promise)
-let a5 = $await(a4, a4 => a4 + ':5')
+// use previous awaitx return value (a promise)
+let a5 = awaitx(a4, a4 => a4 + ':5')
 a5.then(v => console.log(v))
 
 // create an async function
-let afn = $async(function(x) {
-  let a = $await(x, x => x + 1)
-  let b = $await(a, a => a + 1)
+let afn = asyncx(function(x) {
+  let a = awaitx(x, x => x + 1)
+  let b = awaitx(a, a => a + 1)
   return b
 })
 afn(1).then(v => console.log('afn:', v)) // 3

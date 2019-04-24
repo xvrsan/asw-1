@@ -1,5 +1,5 @@
-import $async from './async'
-import $await from './await'
+import asyncx from './asyncx'
+import awaitx from './awaitx'
 
 /**
  * traverse items with async function return new items with promise
@@ -16,9 +16,9 @@ import $await from './await'
  * })
  */
 export default function asyncMap(items, fn) {
-  return $await(items, (items) => {
+  return awaitx(items, (items) => {
     let promises = []
-    let afn = $async(fn)
+    let afn = asyncx(fn)
     items.forEach((item, i) => {
       promises.push(afn(item, i, items))
     })

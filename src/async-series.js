@@ -1,5 +1,5 @@
-import $async from './async'
-import $await from './await'
+import asyncx from './asyncx'
+import awaitx from './awaitx'
 
 /**
  * run async function in serial, async function will run one by one,
@@ -9,10 +9,10 @@ import $await from './await'
  * @return {*} the last fn's return out
  * @example
  * let fns = []
- * let v = await asyncSerial(fns, arg1, arg2)
+ * let v = await asyncSeries(fns, arg1, arg2)
  */
-export default function asyncSerialize(fns, ...args) {
-  return $await(fns, (fns) => {
+export default function asyncSeries(fns, ...args) {
+  return awaitx(fns, (fns) => {
     let i = 0
     let through = (params) => {
       let fn = fns[i]
@@ -20,7 +20,7 @@ export default function asyncSerialize(fns, ...args) {
         return params
       }
       i ++
-      let afn = $async(fn)
+      let afn = asyncx(fn)
       return afn(...args).then(through)
     }
     return through(args)

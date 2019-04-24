@@ -5,24 +5,24 @@
  * @return {function} a function which return a promise
  * @example
  * let func = (a) => { return a + 1 } // or: let func = async (a) => { ... }
- * let afn = $async(func)
+ * let afn = asyncx(func)
  * afn('xxx').then((b) => {
  *  console.log(b)
  * })
  */
-export default function $async(fn, native = false) {
-  return (...args) => {
+export default function asyncx(fn, native = false) {
+  return function(...args) {
     if (!native) {
       return new Promise((resolve, reject) => {
-        Promise.resolve().then(() => fn(...args)).then(resolve).catch(reject)
+        Promise.resolve().then(() => fn.call(this, ...args)).then(resolve).catch(reject)
       })
     }
 
     // native async function behaviour
     try {
-      return Promise.resolve(fn(...args))
+      return Promise.resolve(fn.call(this, ...args))
     }
-    catch(e) {
+    catch (e) {
       return Promise.reject(e);
     }
   }
