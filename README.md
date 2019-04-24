@@ -5,7 +5,7 @@ A library to help developer use async functions as promises.
 ## install
 
 ```
-npm i -S asw
+npm i asw
 ```
 
 ## Usage
@@ -241,7 +241,7 @@ await asyncI(items, (item, i) => {
 })
 ```
 
-### asyncSerialize(fns, ...args)
+### asyncSeries(fns, ...args)
 
 _alias: asyncS(fns, ...args)_
 
@@ -257,7 +257,7 @@ await asyncSerialize(fns, xx1, xx2)
 
 Async functions will run with ...args one by one after each resolved, if one rejected, the letf ones will not run any more.
 
-### asyncParallelize(fns, ...args)
+### asyncParallel(fns, ...args)
 
 _alias: asyncP(fns, ...args)_
 
