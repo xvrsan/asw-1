@@ -1,4 +1,4 @@
-# Hello Async
+# ASW (async & await)
 
 A library to help developer use async functions as promises.
 
