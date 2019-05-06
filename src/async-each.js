@@ -14,6 +14,7 @@ import asyncI from './async-iterate'
  *   return data
  * })
  */
-export default function asyncEach(items, fn) {
+export function asyncEach(items, fn) {
   return asyncI(items, (item, i, next) => awaitx(fn(item, i, items), next))
 }
+export default asyncEach

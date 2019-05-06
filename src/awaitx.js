@@ -5,22 +5,23 @@
  * @return {Promise}
  * @example
  * const afn = asyncx((x) => {
-  *  let a = awaitx(x, x => x + 1)
-  *  let b = awaitx(a, a => a + 2)
-  *  return b
-  * })
-  *
-  * let a = awaitx(afn(55)) // 58
-  * let b = awaitx(a, a => a + 12) // 70
-  * b.then((y) => console.log(y))
-  */
- export default function awaitx(input, fn) {
-   if (typeof fn === 'function') {
-      return new Promise((resolve, reject) => {
-        Promise.resolve(input).then(fn).then(resolve).catch(reject)
-      })
-   }
-   else {
-      return Promise.resolve(input)
-   }
- }
+ *  let a = awaitx(x, x => x + 1)
+ *  let b = awaitx(a, a => a + 2)
+ *  return b
+ * })
+ *
+ * let a = awaitx(afn(55)) // 58
+ * let b = awaitx(a, a => a + 12) // 70
+ * b.then((y) => console.log(y))
+ */
+export function awaitx(input, fn) {
+  if (typeof fn === 'function') {
+    return new Promise((resolve, reject) => {
+      Promise.resolve(input).then(fn).then(resolve).catch(reject)
+    })
+  }
+  else {
+    return Promise.resolve(input)
+  }
+}
+export default awaitx

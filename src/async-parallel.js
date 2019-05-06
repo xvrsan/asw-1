@@ -8,7 +8,7 @@ import awaitx from './awaitx'
  * @param {*} args
  * @return {*}
  */
-export default function asyncParallel(fns, ...args) {
+export function asyncParallel(fns, ...args) {
   return awaitx(fns, (fns) => {
     let promises = []
     fns.forEach((fn) => {
@@ -19,3 +19,4 @@ export default function asyncParallel(fns, ...args) {
     return Promise.all(promises)
   })
 }
+export default asyncParallel

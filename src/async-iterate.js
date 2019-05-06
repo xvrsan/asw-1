@@ -18,7 +18,7 @@ import awaitx from './awaitx'
  *   }
  * })
  */
-export default function asyncIterate(items, fn) {
+export function asyncIterate(items, fn) {
   return awaitx(items, (items) => {
     return new Promise((resolve, reject) => {
       let i = 0
@@ -35,3 +35,4 @@ export default function asyncIterate(items, fn) {
     })
   })
 }
+export default asyncIterate

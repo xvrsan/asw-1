@@ -1,6 +1,6 @@
 module.exports = {
   mode: 'none',
-  entry: __dirname + '/src/asw.js',
+  entry: __dirname + '/src/index.js',
   output: {
     path: __dirname + '/dist',
     filename: 'asw.js',

@@ -11,7 +11,7 @@ import awaitx from './awaitx'
  * let fns = []
  * let v = await asyncSeries(fns, arg1, arg2)
  */
-export default function asyncSeries(fns, ...args) {
+export function asyncSeries(fns, ...args) {
   return awaitx(fns, (fns) => {
     let i = 0
     let through = (params) => {
@@ -26,3 +26,4 @@ export default function asyncSeries(fns, ...args) {
     return through(args)
   })
 }
+export default asyncSeries

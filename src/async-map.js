@@ -15,7 +15,7 @@ import awaitx from './awaitx'
  *   return data
  * })
  */
-export default function asyncMap(items, fn) {
+export function asyncMap(items, fn) {
   return awaitx(items, (items) => {
     let promises = []
     let afn = asyncx(fn)
@@ -25,3 +25,4 @@ export default function asyncMap(items, fn) {
     return Promise.all(promises)
   })
 }
+export default asyncMap

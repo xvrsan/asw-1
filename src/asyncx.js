@@ -10,7 +10,7 @@
  *  console.log(b)
  * })
  */
-export default function asyncx(fn, native = false) {
+export function asyncx(fn, native = false) {
   return function(...args) {
     if (!native) {
       return new Promise((resolve, reject) => {
@@ -27,3 +27,4 @@ export default function asyncx(fn, native = false) {
     }
   }
 }
+export default asyncx
