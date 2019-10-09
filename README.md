@@ -252,7 +252,7 @@ let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
-await asyncSerialize(fns, xx1, xx2)
+await asyncSeries(fns, xx1, xx2)
 ```
 
 Async functions will run with ...args one by one after each resolved, if one rejected, the letf ones will not run any more.
@@ -268,7 +268,7 @@ let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
-await asyncParallelize(fns, xx1, xx2)
+await asyncParallel(fns, xx1, xx2)
 ```
 
 Async functions will start with ...args at the same time, if one rejected, anthors will still run.
