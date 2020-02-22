@@ -218,8 +218,8 @@ _alias: asyncI(items, fn)_
 Iterate items with async function.
 
 ```
-let items = []
-await asyncIterate(items, async (item, i, next, stop) => {
+const items = []
+await asyncIterate(items, async (item, i, next, stop, complete) => {
   // ...
   setTimeout(next, 1000)
 })
@@ -231,7 +231,7 @@ Iterate to next item.
 
 **stop**
 
-Stop iterating. The left iterator functions will not run any more.
+Stop (reject) iterating. The left iterator functions will not run any more.
 
 Notice: `next()` or `stop()` should be called anyway! If you do not pass `next`, it will be treated as a resolved promise.
 
@@ -240,6 +240,24 @@ await asyncI(items, (item, i) => {
   console.log(item, i)
 })
 ```
+
+**complete**
+
+Finish iterating by resolve a value.
+
+```
+const items = []
+const found = await asyncIterate(items, async (item, i, next, stop, complete) => {
+  if (item.type === 'animal') {
+    complete(item)
+  }
+  else {
+    next()
+  }
+})
+```
+
+We use previous code to find a `item` from an array.
 
 ### asyncSeries(fns, ...args)
 
