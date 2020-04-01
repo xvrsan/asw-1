@@ -1,5 +1,5 @@
-import asyncx from './asyncx'
-import awaitx from './awaitx'
+import asyncx from './asyncx.js'
+import awaitx from './awaitx.js'
 
 /**
  * traverse items with async function return new items with promise

@@ -1,5 +1,5 @@
-import awaitx from './awaitx'
-import asyncI from './async-iterate'
+import awaitx from './awaitx.js'
+import asyncI from './async-iterate.js'
 
 /**
  * traverse items with async function one by one
