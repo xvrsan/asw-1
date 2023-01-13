@@ -12,45 +12,48 @@ npm i asw
 
 ES6:
 
-```
+```js
 import {
   asyncx,
   awaitx,
-  asyncE,
-  asyncM,
-  asyncI,
-  asyncS,
-  asyncP,
+  asyncEach,
+  asyncMap,
+  asyncFind
+  asyncSeries,
+  asyncParallel,
+  asyncIterate,
 } from 'asw'
 ```
 
 CommonJS:
 
-```
+```js
 const {
   asyncx,
   awaitx,
-  asyncE,
-  asyncM,
-  asyncI,
-  asyncS,
-  asyncP,
+  asyncEach,
+  asyncMap,
+  asyncFind
+  asyncSeries,
+  asyncParallel,
+  asyncIterate,
 } = require('asw')
 ```
 
 In browser:
 
-```
+```js
 <script src="node_modules/asw/dist/asw.js"></script>
 <script>
 const {
   asyncx,
   awaitx,
-  asyncE,
-  asyncM,
-  asyncI,
-  asyncS,
-  asyncP,
+  asyncEach,
+  asyncMap,
+  asyncFind
+  asyncSeries,
+  asyncParallel,
+  asyncIterate,
 } = window['asw']
 </script>
 ```
@@ -63,7 +66,7 @@ Notice: native `Promise` should be supported.
 
 Convert a function to be async function, no matter it is a normal function or an async function.
 
-```
+```js
 // normal function:
 let fn = (arg1) => { ... }
 let afn = asyncx(fn)
@@ -82,13 +85,13 @@ function async calc(fn) {
 }
 ```
 
-**navtive**
+**native**
 
 _default: false_
 
 For ES default behaviour, async function will run synchronously before reach first `await` syntax, for example:
 
-```
+```js
 async function get(url) {
   console.log(1)
   await fetch(url)
@@ -105,7 +108,7 @@ console.log(3)
 As default, `asyncx` converts a function to be a completely synchronous function.
 If you want to use native behaviour, you can set `native` to be `true`:
 
-```
+```js
 const get = asyncx(function(url) {
   console.log(1)
   awaitx(fetch(url), () => console.log(2))
@@ -122,7 +125,7 @@ console.log(3)
 
 Convert a normal value or a promise to be a promise.
 
-```
+```js
 let x = 3
 let a = awaitx(x) // a is a promise which resolve with `x`
 let b = awaitx(a, a => a + 12) // b is a promise which resolve with `x + 12`
@@ -138,7 +141,7 @@ Here, `a` and `b` are promises which resovle `fn` return value.
 
 Use asyncx and awaitx to write async function like:
 
-```
+```js
 const get = asyncx(function(url) {
   let res = awaitx(fetch(url))
   let data = awaitx(res, res => res.json())
@@ -159,7 +162,7 @@ get('http://xxx').then(data => { ... })
 Here `get` function is defined very like an `async function`.
 However, the syntax of `await` is much more easy than `awaitx`, here we have to use a function to calculate the value.
 
-```
+```js
 // usage1: with a normal value
 let defer = awaitx('xxx')
 
@@ -183,11 +186,9 @@ If the second parameter is an async function, the resolve value will be used as 
 
 ### asyncEach(items, fn)
 
-_alias: asyncE(items, fn)_
-
 Traverse items with async function one by one.
 
-```
+```js
 let items = [...]
 await asyncEach(items, async (item, i, arr) => {
   // ...
@@ -196,11 +197,9 @@ await asyncEach(items, async (item, i, arr) => {
 
 ### asyncMap(items, fn)
 
-_alias: asyncM(items, fn)_
-
 Traverse items with async function and return an new array in a promise.
 
-```
+```js
 let items = [...]
 let newItems = await asyncEach(items, async (item, i) => {
   // ...
@@ -211,13 +210,25 @@ let newItems = await asyncEach(items, async (item, i) => {
 New items will be returned when all async function finish.
 In a forEach loop, `fn` will run in parallel.
 
-### asyncIterate(items, fn)
+### asyncFind(items, fn)
 
-_alias: asyncI(items, fn)_
+Traverse items with async function and return the find item.
+
+```js
+const items = [...]
+const item = await asyncFind(items, async (item, i) => {
+  if (i === 2) {
+    return true
+  }
+  return false
+})
+```
+
+### asyncIterate(items, fn)
 
 Iterate items with async function.
 
-```
+```js
 const items = []
 await asyncIterate(items, async (item, i, next, stop, complete) => {
   // ...
@@ -235,7 +246,7 @@ Stop (reject) iterating. The left iterator functions will not run any more.
 
 Notice: `next()` or `stop()` should be called anyway! If you do not pass `next`, it will be treated as a resolved promise.
 
-```
+```js
 await asyncI(items, (item, i) => {
   console.log(item, i)
 })
@@ -245,7 +256,7 @@ await asyncI(items, (item, i) => {
 
 Finish iterating by resolve a value.
 
-```
+```js
 const items = []
 const found = await asyncIterate(items, async (item, i, next, stop, complete) => {
   if (item.type === 'animal') {
@@ -261,11 +272,9 @@ We use previous code to find a `item` from an array.
 
 ### asyncSeries(fns, ...args)
 
-_alias: asyncS(fns, ...args)_
-
 Calculate with args by async functions in serial.
 
-```
+```js
 let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
@@ -277,11 +286,9 @@ Async functions will run with ...args one by one after each resolved, if one rej
 
 ### asyncParallel(fns, ...args)
 
-_alias: asyncP(fns, ...args)_
-
 Calculate with args by async functions in parallel.
 
-```
+```js
 let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
