@@ -73,38 +73,41 @@
 </code></pre>
 <h2>Usage</h2>
 <p>ES6:</p>
-<pre class="prettyprint source"><code>import {
+<pre class="prettyprint source lang-js"><code>import {
   asyncx,
   awaitx,
-  asyncE,
-  asyncM,
-  asyncI,
-  asyncS,
-  asyncP,
+  asyncEach,
+  asyncMap,
+  asyncFind
+  asyncSeries,
+  asyncParallel,
+  asyncIterate,
 } from 'asw'
 </code></pre>
 <p>CommonJS:</p>
-<pre class="prettyprint source"><code>const {
+<pre class="prettyprint source lang-js"><code>const {
   asyncx,
   awaitx,
-  asyncE,
-  asyncM,
-  asyncI,
-  asyncS,
-  asyncP,
+  asyncEach,
+  asyncMap,
+  asyncFind
+  asyncSeries,
+  asyncParallel,
+  asyncIterate,
 } = require('asw')
 </code></pre>
 <p>In browser:</p>
-<pre class="prettyprint source"><code>&lt;script src=&quot;node_modules/asw/dist/asw.js&quot;>&lt;/script>
+<pre class="prettyprint source lang-js"><code>&lt;script src=&quot;node_modules/asw/dist/asw.js&quot;>&lt;/script>
 &lt;script>
 const {
   asyncx,
   awaitx,
-  asyncE,
-  asyncM,
-  asyncI,
-  asyncS,
-  asyncP,
+  asyncEach,
+  asyncMap,
+  asyncFind
+  asyncSeries,
+  asyncParallel,
+  asyncIterate,
 } = window['asw']
 &lt;/script>
 </code></pre>
@@ -112,7 +115,7 @@ const {
 <h2>API</h2>
 <h3>asyncx(fn, native?)</h3>
 <p>Convert a function to be async function, no matter it is a normal function or an async function.</p>
-<pre class="prettyprint source"><code>// normal function:
+<pre class="prettyprint source lang-js"><code>// normal function:
 let fn = (arg1) => { ... }
 let afn = asyncx(fn)
 
@@ -126,10 +129,10 @@ let afn = asyncx(fn)
   return v
 }
 </code></pre>
-<p><strong>navtive</strong></p>
+<p><strong>native</strong></p>
 <p><em>default: false</em></p>
 <p>For ES default behaviour, async function will run synchronously before reach first <code>await</code> syntax, for example:</p>
-<pre class="prettyprint source"><code>async function get(url) {
+<pre class="prettyprint source lang-js"><code>async function get(url) {
   console.log(1)
   await fetch(url)
   console.log(2)
@@ -143,7 +146,7 @@ console.log(3)
 </code></pre>
 <p>As default, <code>asyncx</code> converts a function to be a completely synchronous function.
 If you want to use native behaviour, you can set <code>native</code> to be <code>true</code>:</p>
-<pre class="prettyprint source"><code>const get = asyncx(function(url) {
+<pre class="prettyprint source lang-js"><code>const get = asyncx(function(url) {
   console.log(1)
   awaitx(fetch(url), () => console.log(2))
 }, true) // notice here
@@ -156,7 +159,7 @@ console.log(3)
 </code></pre>
 <h3>awaitx(input, yield)</h3>
 <p>Convert a normal value or a promise to be a promise.</p>
-<pre class="prettyprint source"><code>let x = 3
+<pre class="prettyprint source lang-js"><code>let x = 3
 let a = awaitx(x) // a is a promise which resolve with `x`
 let b = awaitx(a, a => a + 12) // b is a promise which resolve with `x + 12`
 
@@ -169,7 +172,7 @@ b.then(b => console.log(b)) // 16
 <li>@return: a promise defer which resolved whith <code>yield</code> return value</li>
 </ul>
 <p>Use asyncx and awaitx to write async function like:</p>
-<pre class="prettyprint source"><code>const get = asyncx(function(url) {
+<pre class="prettyprint source lang-js"><code>const get = asyncx(function(url) {
   let res = awaitx(fetch(url))
   let data = awaitx(res, res => res.json())
   return data
@@ -187,7 +190,7 @@ get('http://xxx').then(data => { ... })
 </code></pre>
 <p>Here <code>get</code> function is defined very like an <code>async function</code>.
 However, the syntax of <code>await</code> is much more easy than <code>awaitx</code>, here we have to use a function to calculate the value.</p>
-<pre class="prettyprint source"><code>// usage1: with a normal value
+<pre class="prettyprint source lang-js"><code>// usage1: with a normal value
 let defer = awaitx('xxx')
 
 // usage2: with a promise
@@ -207,17 +210,15 @@ If the first parameter is a promise, its resolve value will be used as the secon
 The second parameter should be a function, its return value will be used as awaitx return value.
 If the second parameter is an async function, the resolve value will be used as awaitx return value.</p>
 <h3>asyncEach(items, fn)</h3>
-<p><em>alias: asyncE(items, fn)</em></p>
 <p>Traverse items with async function one by one.</p>
-<pre class="prettyprint source"><code>let items = [...]
+<pre class="prettyprint source lang-js"><code>let items = [...]
 await asyncEach(items, async (item, i, arr) => {
   // ...
 })
 </code></pre>
 <h3>asyncMap(items, fn)</h3>
-<p><em>alias: asyncM(items, fn)</em></p>
 <p>Traverse items with async function and return an new array in a promise.</p>
-<pre class="prettyprint source"><code>let items = [...]
+<pre class="prettyprint source lang-js"><code>let items = [...]
 let newItems = await asyncEach(items, async (item, i) => {
   // ...
   return item
@@ -225,10 +226,19 @@ let newItems = await asyncEach(items, async (item, i) => {
 </code></pre>
 <p>New items will be returned when all async function finish.
 In a forEach loop, <code>fn</code> will run in parallel.</p>
+<h3>asyncFind(items, fn)</h3>
+<p>Traverse items with async function and return the find item.</p>
+<pre class="prettyprint source lang-js"><code>const items = [...]
+const item = await asyncFind(items, async (item, i) => {
+  if (i === 2) {
+    return true
+  }
+  return false
+})
+</code></pre>
 <h3>asyncIterate(items, fn)</h3>
-<p><em>alias: asyncI(items, fn)</em></p>
 <p>Iterate items with async function.</p>
-<pre class="prettyprint source"><code>const items = []
+<pre class="prettyprint source lang-js"><code>const items = []
 await asyncIterate(items, async (item, i, next, stop, complete) => {
   // ...
   setTimeout(next, 1000)
@@ -239,13 +249,13 @@ await asyncIterate(items, async (item, i, next, stop, complete) => {
 <p><strong>stop</strong></p>
 <p>Stop (reject) iterating. The left iterator functions will not run any more.</p>
 <p>Notice: <code>next()</code> or <code>stop()</code> should be called anyway! If you do not pass <code>next</code>, it will be treated as a resolved promise.</p>
-<pre class="prettyprint source"><code>await asyncI(items, (item, i) => {
+<pre class="prettyprint source lang-js"><code>await asyncI(items, (item, i) => {
   console.log(item, i)
 })
 </code></pre>
 <p><strong>complete</strong></p>
 <p>Finish iterating by resolve a value.</p>
-<pre class="prettyprint source"><code>const items = []
+<pre class="prettyprint source lang-js"><code>const items = []
 const found = await asyncIterate(items, async (item, i, next, stop, complete) => {
   if (item.type === 'animal') {
     complete(item)
@@ -257,9 +267,8 @@ const found = await asyncIterate(items, async (item, i, next, stop, complete) =>
 </code></pre>
 <p>We use previous code to find a <code>item</code> from an array.</p>
 <h3>asyncSeries(fns, ...args)</h3>
-<p><em>alias: asyncS(fns, ...args)</em></p>
 <p>Calculate with args by async functions in serial.</p>
-<pre class="prettyprint source"><code>let fns = [
+<pre class="prettyprint source lang-js"><code>let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
@@ -267,9 +276,8 @@ await asyncSeries(fns, xx1, xx2)
 </code></pre>
 <p>Async functions will run with ...args one by one after each resolved, if one rejected, the letf ones will not run any more.</p>
 <h3>asyncParallel(fns, ...args)</h3>
-<p><em>alias: asyncP(fns, ...args)</em></p>
 <p>Calculate with args by async functions in parallel.</p>
-<pre class="prettyprint source"><code>let fns = [
+<pre class="prettyprint source lang-js"><code>let fns = [
   async (arg1, arg2) => { ... },
   async (arg1, arg2) => { ... },
 ]
