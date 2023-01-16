@@ -195,6 +195,16 @@ await asyncEach(items, async (item, i, arr) => {
 })
 ```
 
+### asyncFor(start, end, step, fn)
+
+Iterate from start to stop by step.
+
+```js
+await asyncForm(0, 10, 1, async (i, next, stop, complete) => {
+  ...
+})
+```
+
 ### asyncMap(items, fn)
 
 Traverse items with async function and return an new array in a promise.
