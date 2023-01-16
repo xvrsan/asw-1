@@ -216,6 +216,12 @@ await asyncEach(items, async (item, i, arr) => {
   // ...
 })
 </code></pre>
+<h3>asyncFor(start, end, step, fn)</h3>
+<p>Iterate from start to stop by step.</p>
+<pre class="prettyprint source lang-js"><code>await asyncForm(0, 10, 1, async (i, next, stop, complete) => {
+  ...
+})
+</code></pre>
 <h3>asyncMap(items, fn)</h3>
 <p>Traverse items with async function and return an new array in a promise.</p>
 <pre class="prettyprint source lang-js"><code>let items = [...]
