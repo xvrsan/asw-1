@@ -1,6 +1,6 @@
 {
   "name": "asw",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A library to help developer use async await as promises.",
   "main": "dist/asw.js",
   "scripts": {
